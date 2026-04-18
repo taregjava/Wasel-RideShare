@@ -1,3 +1,25 @@
+
+services:
+  ride:
+    url: ${RIDE_SERVICE_URL:http://localhost:8084}
+
 spring:
   application:
     name: wasel-matchin
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+        group-id: ${KAFKA_CONSUMER_GROUP_ID:wasel-matching-group}
+        auto-offset-reset: earliest
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+    producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+        properties:
+          spring.json.add.type.headers: false
+wasel:
+    location:
+        url: ${LOCATION_SERVICE_URL:http://localhost:8082}
