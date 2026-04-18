@@ -3,9 +3,19 @@ services:
   ride:
     url: ${RIDE_SERVICE_URL:http://localhost:8084}
 
+location:
+  service:
+    url: ${LOCATION_SERVICE_URL:http://localhost:8082}
+
 spring:
   application:
     name: wasel-matchin
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.autoconfigure.LifecycleMvcEndpointAutoConfiguration
+      - org.springframework.cloud.autoconfigure.RefreshAutoConfiguration
+      - org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration
+      - org.springframework.cloud.client.discovery.simple.SimpleDiscoveryClientAutoConfiguration
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
@@ -14,6 +24,10 @@ spring:
         auto-offset-reset: earliest
         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+        properties:
+          spring.json.trusted.packages: "com.halfacode.waselmatchin.event"
+          spring.json.value.default.type: "com.halfacode.waselmatchin.event.RideRequestedEvent"
+          spring.json.use.type.headers: false
 
     producer:
         key-serializer: org.apache.kafka.common.serialization.StringSerializer

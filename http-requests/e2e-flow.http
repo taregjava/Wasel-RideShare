@@ -1,0 +1,46 @@
+###
+# End-to-end flow (Location + Ride + Kafka side effects)
+# This file focuses on HTTP requests. Kafka verification is done via logs/topic consumer.
+
+### Step 1) Seed a nearby driver
+POST {{locationBaseUrl}}/api/v1/locations/drivers/update-location
+Content-Type: application/json
+
+{
+  "driveId": "driver-e2e-1",
+  "latitude": 24.7136,
+  "longitude": 46.6753
+}
+
+### Step 2) Check nearby driver exists
+GET {{locationBaseUrl}}/api/v1/locations/drivers/nearby?latitude=24.7136&longitude=46.6753&radiusKm=5
+Accept: application/json
+
+### Step 3) Create ride request (publishes ride.requested)
+POST {{rideBaseUrl}}/api/rides/request
+Content-Type: application/json
+
+{
+  "riderId": "rider-e2e-1",
+  "pickupLatitude": 24.7136,
+  "pickupLongitude": 46.6753,
+  "pickupAddress": "E2E Pickup",
+  "dropLatitude": 24.774265,
+  "dropLongitude": 46.738586,
+  "dropAddress": "E2E Drop"
+}
+
+# Expected runtime side effects:
+# - wasel-ride log: Published RideRequestEvent for rideId: <id>
+# - wasel-matchin log: Received ride event: ...
+# - wasel-matchin log: Ride matched and event published: ...
+# - Kafka topic ride.requested gets one message
+# - Kafka topic ride.matched gets one message
+
+### Step 4) Fetch rider rides
+GET {{rideBaseUrl}}/api/rides/rider/rider-e2e-1
+Accept: application/json
+
+### Step 5) Cleanup test driver location
+DELETE {{locationBaseUrl}}/api/v1/locations/drivers/driver-e2e-1?driverId=driver-e2e-1
+

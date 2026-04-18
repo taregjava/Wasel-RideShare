@@ -1,0 +1,59 @@
+###
+# Wasel Location Service requests
+# Usage in JetBrains HTTP Client:
+# 1) Select environment: dev (from wasel.env.json)
+# 2) Run each request
+
+### 1) Update driver-1 location
+POST {{locationBaseUrl}}/api/v1/locations/drivers/update-location
+Content-Type: application/json
+
+{
+  "driveId": "driver-1",
+  "latitude": 24.7136,
+  "longitude": 46.6753
+}
+
+# Expected response (200):
+# Driver location updated successfully
+
+### 2) Update driver-2 location
+POST {{locationBaseUrl}}/api/v1/locations/drivers/update-location
+Content-Type: application/json
+
+{
+  "driveId": "driver-2",
+  "latitude": 24.7150,
+  "longitude": 46.6760
+}
+
+# Expected response (200):
+# Driver location updated successfully
+
+### 3) Get nearby drivers
+GET {{locationBaseUrl}}/api/v1/locations/drivers/nearby?latitude=24.7136&longitude=46.6753&radiusKm=5
+Accept: application/json
+
+# Expected response (200) example:
+# [
+#   {
+#     "driverId": "driver-1",
+#     "latitude": 24.7136,
+#     "longitude": 46.6753,
+#     "distanceInKm": 0.0
+#   },
+#   {
+#     "driverId": "driver-2",
+#     "latitude": 24.715,
+#     "longitude": 46.676,
+#     "distanceInKm": 0.2
+#   }
+# ]
+
+### 4) Delete driver location
+# Note: controller currently expects query param driverId.
+DELETE {{locationBaseUrl}}/api/v1/locations/drivers/driver-1?driverId=driver-1
+
+# Expected response (200):
+# Driver location deleted successfully
+

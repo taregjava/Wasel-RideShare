@@ -1,0 +1,71 @@
+###
+# Wasel Ride Service requests
+# Usage in JetBrains HTTP Client with env=dev.
+
+### 1) Create ride request
+POST {{rideBaseUrl}}/api/rides/request
+Content-Type: application/json
+
+{
+  "riderId": "rider-100",
+  "pickupLatitude": 24.7136,
+  "pickupLongitude": 46.6753,
+  "pickupAddress": "Pickup A",
+  "dropLatitude": 24.774265,
+  "dropLongitude": 46.738586,
+  "dropAddress": "Drop B"
+}
+
+# Expected response (201) example:
+# {
+#   "id": "1",
+#   "riderId": "rider-100",
+#   "pickupLatitude": 24.7136,
+#   "pickupLongitude": 46.6753,
+#   "pickupAddress": "Pickup A",
+#   "dropLatitude": 24.774265,
+#   "dropLongitude": 46.738586,
+#   "dropAddress": "Drop B",
+#   "status": "MATCHING",
+#   "estimatedFare": 123.45,
+#   "actualFare": 0.0,
+#   "createdAt": "2026-04-18T10:00:00",
+#   "updatedAt": "2026-04-18T10:00:00",
+#   "startedAt": null,
+#   "completedAt": null
+# }
+
+### 2) Get ride by id
+# Replace {rideId} with value from create response.
+GET {{rideBaseUrl}}/api/rides/{rideId}
+Accept: application/json
+
+# Expected response: 200 with RideResponse JSON
+
+### 3) Get rides by rider
+GET {{rideBaseUrl}}/api/rides/rider/rider-100
+Accept: application/json
+
+# Expected response: 200 with array of RideResponse
+
+### 4) Start ride
+# Works only when current status is ACCEPTED.
+PUT {{rideBaseUrl}}/api/rides/{rideId}/start
+Accept: application/json
+
+# Success (200) when accepted, otherwise runtime error JSON from global handler.
+
+### 5) Complete ride
+# Works only when current status is RIDE_STARTED.
+PUT {{rideBaseUrl}}/api/rides/{rideId}/complete
+Accept: application/json
+
+# Success (200) when started, otherwise runtime error JSON.
+
+### 6) Cancel ride
+# Works when status is not RIDE_STARTED and not COMPLETED.
+PUT {{rideBaseUrl}}/api/rides/{rideId}/cancel
+Accept: application/json
+
+# Success (200) with status CANCELLED, otherwise runtime error JSON.
+

@@ -8,12 +8,9 @@ import com.halfacode.waselride.model.RidsStatus;
 import com.halfacode.waselride.repository.RideRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.json.JsonParseException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +23,6 @@ public class RideService {
 
     private final RideRepository rideRepository;
     private final KafkaTemplate<String, RideRequestEvent> kafkaTemplate;
-    private final ObjectMapper objectMapper;
 
     @Value("${app.kafka.topics.ride-requested}")
     private String rideRequestedTopic;

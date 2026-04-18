@@ -4,7 +4,6 @@ package com.halfacode.waselride.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Table(name = "rides")
 public class Ride {
 

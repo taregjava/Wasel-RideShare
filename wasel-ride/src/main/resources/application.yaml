@@ -28,7 +28,7 @@ app:
   kafka:
     topics:
       ride-requested: ${RIDE_REQUESTED_TOPIC:ride.requested}
-      ride-matched: ${RIDE_REQUESTED_TOPIC:ride.matched}
+      ride-matched: ${RIDE_MATCHED_TOPIC:ride.matched}
     topic:
       partitions: ${KAFKA_TOPIC_PARTITIONS:3}
       replicas: ${KAFKA_TOPIC_REPLICAS:1}
